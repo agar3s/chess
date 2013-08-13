@@ -29,9 +29,11 @@ var Monster = function(){
       cells[this.pos.i][this.pos.j].obj=null;
       paintCell(this.pos.i, this.pos.j);
     }
+    last_pos = {i:this.pos.i, j:this.pos.j};
     this.pos.i = i;
     this.pos.j = j;
     cells[i][j].obj=this;
+    sendAction('('+last_pos.i+','+last_pos.j+')', 'move:('+i+','+j+')');
   };
   this.setSelected = function(selected){
     this.selected = selected;

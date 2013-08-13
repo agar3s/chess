@@ -33,6 +33,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <canvas id="board" width='700' height='600'></canvas>
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script>
+    var connection = new WebSocket('ws://localhost:8080', ['soap', 'xmpp']);
+    // When the connection is open, send some data to the server
+    var connected = false;
+    connection.onopen = function () {
+      connection.send('Ping'); // Send the message 'Ping' to the server
+    };
+    // Log errors
+    connection.onerror = function (error) {
+      console.log('WebSocket Error ' + error);
+    };
+    // Log messages from the server
+    connection.onmessage = function (e) {
+      console.log('Server: ' + e.data);
+      connected = true;
+    };
+    var sendAction = function(posIni, action){
+      if(connected)
+        connection.send('f:'+posIni+', a:'+action);
+    };
     $(document).ready(function(){
       $('#board').on('mousemove', function(event){
         var xpos=0, ypos=0;
@@ -49,6 +68,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         selectCell();
       })
     });
+
   </script>
 </body>
 </html>
