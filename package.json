@@ -1,0 +1,11 @@
+{
+  "name": "chessRPG",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "connect": "~2.8.5"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}
