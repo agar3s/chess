@@ -1,18 +1,15 @@
-var connect = require('connect'),
-    http = require('http'),
-    ws = require('ws');
+var connect = require('connect');
+var http = require('http');
 
-var WebSocketServer = ws.Server, 
-    wss = new ws.Server({port: 8080});
+var app = connect();
+var server = http.createServer(app);
 
-wss.on('connection', function(ws) {
-  ws.on('message', function(message) {
-    console.log('received: %s', message);
-  });
-  ws.send('something');
-});
+var socketServer = require('./server');
+socketServer.io(server);
 
-connect()
-    .use(connect.static('app'))
-    .listen(3000);
+app.use(connect.static('app'));
+app.use(connect.favicon());
+app.use(connect.logger('dev'));
+
+server.listen(3000);
 console.log('server ready on http://localhost:3000');
