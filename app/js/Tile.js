@@ -22,29 +22,44 @@
 	THE SOFTWARE.
 */
 
-// Constants.
-var CELL_WIDTH = 80;
-var CELLS_PER_LINE = 8;
+/**
+ * Reurn a board tile object.
+ */
+var Tile = function(x, y){
+	// Make sure the given position is valid.
+	if(x < 0 || x >= CELLS_PER_LINE || y < 0 || y >= CELLS_PER_LINE){
+		return null;
+	}
 
-var CELL_BLACK_COLOR = '#594E3F';
-var CELL_WHITE_COLOR = '#E7DAAA'
-var CELL_HIGHLIGHTED_COLOR = '#EF8222';
-
-var SPRITE_MAX_DIMENSION = 100;
-var SPRITE_HIGHLIGHTED_DIMENSION = 112;
-
-/** Frames per second **/
-var FPS = 24;
-
-var start = function(){
-	var board = new Board(document.getElementById('board'));
+	// Private stuff.
+	var position = {x: x, y: y};
+	var contents = 0;
 	
-	// Add the monsters/
-	var monster = new Monster('img/sprites/zombi.png', 5, [[0,1,0], [1,0,1],[0,1,0]]);
-	var monster2 = new Monster('img/sprites/warrior.png', 5, [[0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,1,1,1,0],
-		[1,1,1,1,1,1,1],[0,1,1,1,1,1,0],[0,0,1,1,1,0,0],[0,0,0,1,0,0,0]]);
-	board.addMonster(monster, {x:1, y:1});
-	board.addMonster(monster2, {x:5, y:4});
+	// Public stuff.
+	this.highlighted = false;
 	
-	board.start();
+	this.getPosition = function(){
+		return position;
+	};
+};
+
+Tile.prototype = {
+	constructor: Tile,
+	
+	/**
+	 * Draw the tile.
+	 * PARAM: The 2D context in which to draw the tile.
+	 */
+	draw: function(context){
+		var position = this.getPosition();
+		
+		if(this.highlighted){
+			context.fillStyle = CELL_HIGHLIGHTED_COLOR;
+		} else if((position.x + position.y) % 2 === 0){
+			context.fillStyle = CELL_BLACK_COLOR;
+		}else{
+			context.fillStyle = CELL_WHITE_COLOR;
+		}
+		context.fillRect(position.x * CELL_WIDTH, position.y * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH);
+	}
 };

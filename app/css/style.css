@@ -1,5 +1,8 @@
+body{
+	background: #302A1C;
+}
+
 #board {
-  background: #302A1C;
-  display: block;
-  margin: 0 auto;
+	display: block;
+	margin: 0 auto;
 }

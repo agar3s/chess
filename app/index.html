@@ -1,68 +1,50 @@
 <!DOCTYPE html>
-<html>
+<!--
+	The MIT License (MIT)
 
-<head>
+	Copyright (c) 2013 Chess Team
 
-  <meta charset="UTF-8">
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
 
-  <title>Chess Board - Week 7 Game - CodePen</title>
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
 
-  <!--
-Copyright (c) 2013 by Giovanny (http://codepen.io/agares/pen/dfeca)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
 -->
-
-  <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
-
-</head>
-
-<body>
-
-  <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>The Game</title>
-</head>
-<body>
-  <canvas id="board" width='700' height='600'></canvas>
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://localhost');
-
-    var sendAction = function(posIni, action){
-      socket.emit('action', {f: posIni, a: action});
-    };
-    
-    $(document).ready(function(){
-      $('#board').on('mousemove', function(event){
-        var xpos=0, ypos=0;
-        if(event.offsetX==undefined){
-          xpos = event.pageX-$('#board').offset().left;
-          ypos = event.pageY-$('#board').offset().top;  
-        }else{
-          xpos = event.offsetX;
-          ypos = event.offsetY;
-        }
-        trackCursor(xpos, ypos);
-
-      }).on('click', function(event){
-        selectCell();
-      })
-    });
-
-  </script>
-</body>
-</html>
-
-  <script src="js/index.js"></script>
-
-</body>
-
+	<head>
+		<meta charset="UTF-8">
+		<title>Chess</title>
+		<link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+	</head>
+	<body>
+		<canvas id="board"></canvas>
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/Board.js"></script>
+		<script src="js/Tile.js"></script>
+		<script src="js/Monster.js"></script>
+		<script src="js/index.js"></script>
+		<script>
+			var socket = io.connect('http://localhost');
+			var sendAction = function(posIni, posTarget, action){
+			  socket.emit('action', {f: posIni, t: posTarget, a: action});
+			};
+		
+			$(document).ready(function(){
+				start();
+			});
+		</script>
+	</body>
 </html>
