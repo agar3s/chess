@@ -2,7 +2,7 @@
   "name": "chessRPG",
   "version": "0.0.1",
   "dependencies": {
-  	"ws": "0.4.27"
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {
     "connect": "2.8.5"
