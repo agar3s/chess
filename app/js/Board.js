@@ -22,10 +22,6 @@
 	THE SOFTWARE.
 */
 
-// Constants.
-var CELL_WIDTH = 80;
-var CELLS_PER_LINE = 8;
-
 /**
  * Return a board object.
  * PARAM: Canvas obj, the canvas used to draw the game.
@@ -76,6 +72,7 @@ var Board = function(obj){
 		var highlightedContent = null;
 		var targetCells = null;
 		var pendingAction = null;
+		var selectedContent = null;
 		
 		// Return the tile associated with the given event. 
 		var getCellForMouseEvent = function(event){
@@ -85,8 +82,8 @@ var Board = function(obj){
 				yCoord = event.pageY - canvas.offsetTop;
 			}
 			else{ 
-				xCoord = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-				yCoord = event.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+				xCoord = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft; 
+				yCoord = event.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop; 
 			}
 			
 			var x = parseInt(xCoord / CELL_WIDTH);
@@ -166,8 +163,9 @@ var Board = function(obj){
 		 */
 		canvas.addEventListener('mousemove', function(event){
 			var cell = getCellForMouseEvent(event);
-			if(highlightedContent){
+			if(highlightedContent && highlightedContent !== selectedContent){
 				highlightedContent.highlighted = false;
+				highlightedContent = null;
 			}
 			if(cell.content){
 				highlightedContent = cell.content;
@@ -186,12 +184,22 @@ var Board = function(obj){
 				for(var i = 0; i < targetCells.length; i++){
 					targetCells[i].tile.highlighted = false;
 				}
+				targetCells = null;
+			}
+			
+			if(selectedContent && !cellIsHighlighted){
+				selectedContent.highlighted = false;
+				selectedContent = null;
 			}
 			
 			if(cellIsHighlighted && pendingAction){
 				pendingAction.action(thisBoard, cell);
+				selectedContent = null;
+				pendingAction = null;
 			} else if(cell.content){
 				// For now a click will trigger the 'move' action.
+				selectedContent = cell.content;
+				selectedContent.highlighted = true;
 				pendingAction = cell.content.getActions().move;
 				targetCells = getCellsForMatrix(pendingAction.target, cell, true);
 			}
@@ -207,7 +215,7 @@ Board.prototype = {
 	 */
 	addMonster: function(monster, position){
 		var cells = this.getCells();
-		monster.setPosition(position.x, position.y);
+		monster.position = {x:position.x, y:position.y};
 		cells[position.x][position.y].content = monster;
 	},
 	

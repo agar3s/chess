@@ -23,72 +23,43 @@
 */
 
 /**
- * Return a new monster.
- * PARAM:
- * sprite: Monster's image source.
- * hp: Monster's hitpoints.
- * movement: Monster's movement matrix, the matrix must be a squared matrix
- * 	and its dimesion must be an odd number greater than 3.
+ * Abstract class.
  */
-var Monster = function(sprite, hp, movement){
-	// Make sure that positive hitpoints where given.
-	if(hp <= 0 || !movement){
-		return null;
-	}
-	
-	// Load the sprite.
-	var image = new Image();
-	image.src = sprite;
-	
-	// Private stuff.
-	var position = {x: 0, y: 0};
-	var hitPoints = hp;
+var Monster = function(){
+	// Subclasses must implement the following methods.
 	
 	/**
-	 * Monster's actions array.
-	 * Each action has a name, a target represented by a matrix of
-	 * possible target tiles surrounding the monster, and the function
-	 * unleashed by the action (this function recieves the game board and the targeted cell).
+	 * Return the sprite image used by the monster.
 	 */
-	var thisMonster = this;
-	var actions = {move: {target: movement, action: function(board, cell){
-		thisMonster.move(board, cell);
-	}}};
-	
-	// Public stuff.
-	this.highlighted = false;
-	
 	this.getImage = function(){
-		return image;
-	};
-	
-	this.getPosition = function(){
-		return position;
-	};
-	
-	this.setPosition = function(x, y){
-		position = {x: x, y: y};
+		// Overwrite
 	};
 	
 	this.getActions = function(){
-		return actions;
+		// Overwrite
 	};
 };
 
 Monster.prototype = {
 	constructor: Monster,
+	highlighted: false,
+	
+	/**
+	 * Monster's position, given in cartesian coordinates (x,y).
+	 */
+	position: {x:0, y:0},
 	
 	/**
 	 * Move to the given cell.
 	 */
 	move: function(board, cell){
 		if(!cell.content){
-			var currentPosition = this.getPosition();
+			var currentPosition = this.position;
 			var currentCell = board.getCells()[currentPosition.x][currentPosition.y];
 			currentCell.content = null;
 			
 			var targetPosition = cell.tile.getPosition();
-			this.setPosition(targetPosition.x, targetPosition.y);
+			this.position = {x:targetPosition.x, y:targetPosition.y};
 			cell.content = this;
 			
 			// Inform the server.
@@ -100,7 +71,7 @@ Monster.prototype = {
 	 * Draw the monster.
 	 */
 	draw: function(context){
-		var position = this.getPosition();
+		var position = this.position;
 		var image = this.getImage()
 		var imgHeight = image.height;
 		var imgWidth = image.width;

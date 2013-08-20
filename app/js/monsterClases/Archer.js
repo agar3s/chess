@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<!--
+/*
 	The MIT License (MIT)
 
 	Copyright (c) 2013 Chess Team
@@ -21,34 +20,53 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
--->
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Chess</title>
-		<link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
-	</head>
-	<body>
-		<canvas id="board"></canvas>
-		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="js/Board.js"></script>
-		<script src="js/Tile.js"></script>
-		<script src="js/Monster.js"></script>
-		<script src="js/monsterClases/Knight.js"></script>
-		<script src="js/monsterClases/Rogue.js"></script>
-		<script src="js/monsterClases/Archer.js"></script>
-		<script src="js/monsterClases/Mage.js"></script>
-		<script src="js/index.js"></script>
-		<script>
-			var socket = io.connect('http://localhost');
-			var sendAction = function(posIni, posTarget, action){
-			  socket.emit('action', {f: posIni, t: posTarget, a: action});
-			};
-		
-			$(document).ready(function(){
-				start();
-			});
-		</script>
-	</body>
-</html>
+*/
+
+/**
+ * Return a new archer monster.
+ * PARAM:
+ * isHuman: If set to true, then a human sprite will be used.
+ */
+var Archer = function(isHuman){
+	
+	// Load the sprite.
+	var image = new Image();
+	if(isHuman){
+		image.src = 'img/sprites/centaur.png';
+	} else{
+		image.src = 'img/sprites/medusa.png';
+	}
+	
+	
+	// Private stuff.
+	var hitPoints = 3;
+	
+	/**
+	 * Monster's actions array.
+	 * Each action has a name, a target represented by a matrix of
+	 * possible target tiles surrounding the monster, and the function
+	 * unleashed by the action (this function recieves the game board and the targeted cell).
+	 */
+	var thisMonster = this;
+	var actions = {
+		move: {target: [[1,0,0,0,1],
+						[0,1,0,1,0],
+						[0,0,0,0,0],
+						[0,1,0,1,0],
+						[1,0,0,0,1]], 
+		action: function(board, cell){
+			thisMonster.move(board, cell);
+		}}
+	};
+	
+	// Public stuff.
+	this.getImage = function(){
+		return image;
+	};
+	
+	this.getActions = function(){
+		return actions;
+	};
+};
+
+Archer.prototype = new Monster();

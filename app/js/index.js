@@ -39,12 +39,25 @@ var FPS = 24;
 var start = function(){
 	var board = new Board(document.getElementById('board'));
 	
-	// Add the monsters/
-	var monster = new Monster('img/sprites/zombi.png', 5, [[0,1,0], [1,0,1],[0,1,0]]);
-	var monster2 = new Monster('img/sprites/warrior.png', 5, [[0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,1,1,1,0],
-		[1,1,1,1,1,1,1],[0,1,1,1,1,1,0],[0,0,1,1,1,0,0],[0,0,0,1,0,0,0]]);
-	board.addMonster(monster, {x:1, y:1});
-	board.addMonster(monster2, {x:5, y:4});
+	var monsterKnight = new Knight(false);
+	var humanKnight = new Knight(true);
+	board.addMonster(monsterKnight, {x:1, y:2});
+	board.addMonster(humanKnight, {x:6, y:5});
+	
+	var monsterRogue = new Rogue(false);
+	var humanRogue = new Rogue(true);
+	board.addMonster(monsterRogue, {x:3, y:0});
+	board.addMonster(humanRogue, {x:4, y:7});
+	
+	var monsterArcher = new Archer(false);
+	var humanArcher = new Archer(true);
+	board.addMonster(monsterArcher, {x:2, y:1});
+	board.addMonster(humanArcher, {x:5, y:6});
+	
+	var monsterMage = new Mage(false);
+	var humanMage = new Mage(true);
+	board.addMonster(monsterMage, {x:0, y:3});
+	board.addMonster(humanMage, {x:7, y:4});
 	
 	board.start();
 };
