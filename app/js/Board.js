@@ -177,7 +177,7 @@ var Board = function(obj){
 		 * Mouse click
 		 */
 		canvas.addEventListener('click', function(e){
-			var cell = getCellForMouseEvent(event);
+			var cell = getCellForMouseEvent(e);
 			var cellIsHighlighted = cell.tile.highlighted;
 			
 			if(targetCells){
